@@ -40,8 +40,7 @@ export function Hero() {
 
       {/* Animated background elements */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute -top-40 -right-32 w-80 h-80 bg-primary/5 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute -bottom-40 -left-32 w-80 h-80 bg-accent/5 rounded-full blur-3xl animate-pulse delay-1000" />
+        {/* This is the line that was removed */}
       </div>
 
       <div className="max-w-4xl mx-auto text-center relative z-10">

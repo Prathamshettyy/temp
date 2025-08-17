@@ -92,32 +92,27 @@
     --radius: 0.5rem;
   }
 
-  .dark {
-    /* Enhanced dark graphite theme */
-    --background: 220 13% 9%;          /* Deep graphite background */
-    --foreground: 0 0% 95%;            /* Light text */
-    --card: 220 13% 12%;               /* Slightly lighter graphite for cards */
-    --card-foreground: 0 0% 95%;       /* Light text on cards */
-    --popover: 220 13% 12%;            /* Popover background */
-    --popover-foreground: 0 0% 95%;    /* Popover text */
-    --primary: 0 0% 85%;               /* Light gray primary */
-    --primary-foreground: 220 13% 9%;  /* Dark text on primary */
-    --secondary: 220 13% 16%;          /* Secondary graphite */
-    --secondary-foreground: 0 0% 85%;  /* Light text on secondary */
-    --muted: 220 13% 16%;              /* Muted background */
-    --muted-foreground: 0 0% 60%;      /* Muted text */
-    --accent: 220 13% 18%;             /* Accent background */
-    --accent-foreground: 0 0% 85%;     /* Accent text */
-    --destructive: 0 75% 55%;          /* Destructive red */
-    --destructive-foreground: 0 0% 95%; /* Light text on destructive */
-    --border: 220 13% 20%;             /* Border color */
-    --input: 220 13% 16%;              /* Input background */
-    --ring: 0 0% 70%;                  /* Focus ring */
-    --chart-1: 210 70% 60%;
-    --chart-2: 160 60% 50%;
-    --chart-3: 30 80% 60%;
-    --chart-4: 280 65% 65%;
-    --chart-5: 340 75% 60%;
+   .dark {
+    /* Aurora Gradient Theme */
+    --background: 222 84% 4%;           /* Deep space blue */
+    --foreground: 210 40% 98%;         /* Bright white text */
+    --card: 224 71% 8%;                /* Dark purple-blue for cards */
+    --card-foreground: 210 40% 98%;    
+    --popover: 222 84% 4%;             
+    --popover-foreground: 210 40% 98%; 
+    --primary: 217 91% 60%;            /* Bright blue for primary actions */
+    --primary-foreground: 210 40% 98%; 
+    --secondary: 217 33% 17%;          /* Muted blue for secondary elements */
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217 33% 17%;              
+    --muted-foreground: 215 20% 65%;   
+    --accent: 217 33% 25%;             /* Slightly lighter blue for accents */
+    --accent-foreground: 210 40% 98%;  
+    --destructive: 0 62% 30%;          
+    --destructive-foreground: 0 0% 98%;
+    --border: 217 33% 20%;             /* Borders */
+    --input: 217 33% 17%;              
+    --ring: 217 91% 60%;               
   }
 }
 
@@ -125,16 +120,30 @@
   * {
     @apply border-border;
   }
+  
+  /* 2. Replace your existing body styles with these */
   body {
     @apply bg-background text-foreground;
-    /* Graphite gradient background for dark theme */
-    background: linear-gradient(135deg, hsl(var(--background)) 0%, hsl(220 13% 7%) 100%);
   }
 
-  /* Dark theme body styling */
   .dark body {
-    background: linear-gradient(135deg, hsl(220 13% 9%) 0%, hsl(220 13% 6%) 50%, hsl(220 13% 8%) 100%);
+    /* Aurora gradient background */
+    background: linear-gradient(135deg, hsl(222, 84%, 4%) 0%, hsl(260, 60%, 8%) 50%, hsl(222, 84%, 6%) 100%);
     background-attachment: fixed;
+  }
+}
+
+@layer components {
+  /* ... (keep all your other component styles) ... */
+
+  /* 3. Replace your existing .text-gradient style with this one */
+  .text-gradient {
+    @apply bg-gradient-to-r from-foreground via-muted-foreground to-foreground bg-clip-text text-transparent;
+  }
+
+  .dark .text-gradient {
+    /* A more vibrant gradient for the dark theme */
+    @apply bg-gradient-to-r from-blue-400 via-purple-400 to-teal-400;
   }
 }
 
@@ -384,7 +393,7 @@ section#home {
   color: hsl(var(--foreground));
   font-size: 1rem;
   font-weight: 500;
-  color: rgb(218, 218, 216);
+  color: rgb(252, 252, 252);
 }
 
 .text .content {
@@ -550,5 +559,140 @@ section#home {
   60% {
     transform: translateY(5px);
     opacity: 1;
+  }
+}
+
+/* --- Education Timeline Styles --- */
+.timeline-container {
+  position: relative;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.timeline-line-bg, .timeline-line-progress {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  transform: translateX(-50%);
+  z-index: 1; /* Keep the line in the background */
+}
+
+.timeline-line-bg {
+  background-color: hsl(var(--border));
+}
+
+.timeline-line-progress {
+  background-color: hsl(var(--primary));
+  height: 0; /* Animated by JS */
+  transition: height 0.2s linear;
+}
+
+.timeline-item-wrapper {
+  position: relative;
+  padding: 0.5rem 0;
+  width: 50%;
+  opacity: 0; /* Hidden by default for animation */
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+  z-index: 2; /* Ensure items are above the line */
+}
+
+.timeline-item-wrapper:not(:last-child) {
+  margin-bottom: 3rem;
+}
+
+.timeline-item-wrapper:nth-child(odd) {
+  align-self: flex-start;
+  padding-right: 3rem;
+  transform: translateX(-20px);
+}
+
+.timeline-item-wrapper:nth-child(even) {
+  align-self: flex-end;
+  margin-left: 50%;
+  padding-left: 3rem;
+  transform: translateX(20px);
+}
+
+.timeline-item-wrapper.is-visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.timeline-dot {
+  position: absolute;
+  top: 1.5rem;
+  width: 40px;
+  height: 40px;
+  background-color: hsl(var(--muted-foreground));
+  border: 4px solid hsl(var(--background));
+  border-radius: 50%;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s ease-in-out;
+}
+
+.timeline-item-wrapper:nth-child(odd) .timeline-dot {
+  right: -20px;
+}
+
+.timeline-item-wrapper:nth-child(even) .timeline-dot {
+  left: -20px;
+}
+
+.timeline-dot-current {
+  background-color: #22c55e;
+}
+
+.timeline-dot-current::before {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: #22c55e;
+  border-radius: 50%;
+  animation: pulse-signal 2s infinite;
+  z-index: -1;
+}
+
+@keyframes pulse-signal {
+  0% { transform: scale(0.95); opacity: 0.7; }
+  70% { transform: scale(1.6); opacity: 0; }
+  100% { transform: scale(0.95); opacity: 0; }
+}
+
+.timeline-card {
+  background-color: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+.timeline-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+  border-color: hsl(var(--primary) / 0.5);
+}
+.dark .timeline-card:hover {
+  box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+}
+
+@media (max-width: 768px) {
+  .timeline-line-bg, .timeline-line-progress {
+    left: 20px;
+  }
+  .timeline-item-wrapper,
+  .timeline-item-wrapper:nth-child(even) {
+    width: 100%;
+    padding-left: 60px;
+    padding-right: 0;
+    margin-left: 0;
+    align-self: flex-start;
+  }
+  .timeline-item-wrapper:nth-child(odd) .timeline-dot,
+  .timeline-item-wrapper:nth-child(even) .timeline-dot {
+    left: 0;
   }
 }
