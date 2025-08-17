@@ -2,9 +2,10 @@
 
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { MapPin, Phone, Mail, Linkedin, Github, Download } from 'lucide-react';
+import { Download, ChevronDown } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
+import { SparkleText } from './sparkle-text';
 
 export function Hero() {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -16,6 +17,14 @@ export function Hero() {
 
     return () => clearTimeout(timer);
   }, []);
+
+  const handleScrollClick = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+    e.preventDefault();
+    const aboutSection = document.getElementById('about');
+    if (aboutSection) {
+      aboutSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
   return (
     <section 
@@ -95,73 +104,34 @@ export function Hero() {
           </Button>
         </div>
 
-        {/* Contact information */}
+        {/* Sparkle Text Effect */}
         <div 
           className={cn(
-            'grid grid-cols-1 md:grid-cols-3 gap-6 max-w-3xl mx-auto',
+            'flex justify-center mt-12',
             'transition-all duration-700 delay-1000',
             isLoaded ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
           )}
         >
-          <div className="enhanced-card p-6 group">
-            <div className="flex items-center justify-center text-muted-foreground group-hover:text-foreground transition-colors">
-              <MapPin className="w-5 h-5 mr-3 text-primary" />
-              <span>Bantwal, Karnataka, India</span>
-            </div>
-          </div>
-
-          <div className="enhanced-card p-6 group">
-            <div className="flex items-center justify-center text-muted-foreground group-hover:text-foreground transition-colors">
-              <Phone className="w-5 h-5 mr-3 text-primary" />
-              <span>+91-9480242018</span>
-            </div>
-          </div>
-
-          <div className="enhanced-card p-6 group">
-            <div className="flex items-center justify-center text-muted-foreground group-hover:text-foreground transition-colors">
-              <Mail className="w-5 h-5 mr-3 text-primary" />
-              <span>prathamshetty329@gmail.com</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Social links */}
-        <div 
-          className={cn(
-            'flex justify-center space-x-6 mt-12',
-            'transition-all duration-700 delay-1200',
-            isLoaded ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
-          )}
-        >
-          <Button 
-            variant="ghost" 
-            size="icon" 
-            className="glow-border hover:bg-primary/10 hover:scale-110 transition-all duration-300"
-          >
-            <Linkedin className="w-6 h-6" />
-          </Button>
-          <Button 
-            variant="ghost" 
-            size="icon" 
-            className="glow-border hover:bg-primary/10 hover:scale-110 transition-all duration-300"
-          >
-            <Github className="w-6 h-6" />
-          </Button>
-        </div>
-
-        {/* Scroll indicator */}
-        <div 
-          className={cn(
-            'absolute bottom-8 left-1/2 transform -translate-x-1/2',
-            'transition-all duration-700 delay-1400',
-            isLoaded ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
-          )}
-        >
-          <div className="w-6 h-10 border-2 border-muted-foreground rounded-full flex justify-center">
-            <div className="w-1 h-3 bg-muted-foreground rounded-full mt-2 animate-bounce" />
-          </div>
+          <SparkleText />
         </div>
       </div>
+      
+      {/* Scroll indicator that links to the next section */}
+      <a 
+        href="#about"
+        onClick={handleScrollClick}
+        className={cn(
+          'absolute bottom-4 left-1/2 -translate-x-1/2',
+          'transition-all duration-700 delay-1400',
+          isLoaded ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
+        )}
+      >
+        <div className="scroll-indicator">
+          <ChevronDown className="h-6 w-6" />
+          <ChevronDown className="h-6 w-6" />
+          <ChevronDown className="h-6 w-6" />
+        </div>
+      </a>
     </section>
   );
 }

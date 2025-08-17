@@ -1,23 +1,38 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { usePathname } from 'next/navigation'; // Import usePathname
 import { Button } from '@/components/ui/button';
 import { ThemeToggle } from '@/components/theme-toggle';
 import { Menu, X } from 'lucide-react';
 
-const navigation = [
+const navigationItems = [
   { name: 'Home', href: '#home' },
   { name: 'About', href: '#about' },
   { name: 'Education', href: '#education' },
   { name: 'Experience', href: '#experience' },
   { name: 'Projects', href: '#projects' },
   { name: 'Skills', href: '#skills' },
-  { name: 'Contact', href: '#contact' },
+  { name: 'Achievements', href: '#achievements' },
 ];
 
 export function Navigation() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const pathname = usePathname(); // Get the current page's path
+
+  // Adjust links based on the current page
+  const navigation = navigationItems.map(item => {
+    // If we are on a different page (like /contact), prepend a "/" to the links
+    // so they point back to the main page's sections.
+    if (pathname !== '/') {
+      return {
+        ...item,
+        href: item.href === '#home' ? '/' : `/${item.href}`,
+      };
+    }
+    return item;
+  });
 
   useEffect(() => {
     const handleScroll = () => {

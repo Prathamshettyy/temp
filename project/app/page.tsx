@@ -8,7 +8,7 @@ import { Projects } from '@/components/projects';
 import { Skills } from '@/components/skills';
 import { Achievements } from '@/components/achievements';
 import { Activities } from '@/components/activities';
-import { Contact } from '@/components/contact';
+// No longer import Contact here
 import { Navigation } from '@/components/navigation';
 import { Footer } from '@/components/footer';
 
@@ -25,7 +25,7 @@ export default function Home() {
         <Skills />
         <Achievements />
         <Activities />
-        <Contact />
+        {/* <Contact /> component is removed from here */}
       </main>
       <Footer />
     </div>
