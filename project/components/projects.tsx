@@ -48,64 +48,91 @@ const projects = [
 
 export function Projects() {
   return (
-    <section id="projects" className="py-20 bg-muted/30">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="py-20 px-4 sm:px-6 lg:px-8" id="projects">
+      <div className="max-w-6xl mx-auto">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">Projects</h2>
-          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+          <h2 className="text-4xl font-bold mb-4">Projects</h2>
+          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
             A showcase of my development projects and technical achievements
           </p>
         </div>
 
-        <div className="grid lg:grid-cols-1 gap-8 max-w-4xl mx-auto">
+        <div className="grid gap-8 md:gap-12">
           {projects.map((project, index) => (
-            <Card key={index} className="overflow-hidden hover:shadow-lg transition-all duration-300">
-              <CardHeader className="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20">
-                <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
-                  <div className="space-y-2">
-                    <CardTitle className="text-2xl">{project.title}</CardTitle>
-                    <p className="text-muted-foreground">{project.description}</p>
-                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                      <Calendar className="h-4 w-4" />
+            <Card
+              key={index}
+              className="group p-8 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 hover:shadow-black/10 dark:hover:shadow-black/25"
+            >
+              <CardHeader className="pb-6">
+                <div className="flex justify-between items-start flex-wrap gap-4">
+                  <div>
+                    <CardTitle className="text-3xl mb-2">
+                      {project.title}
+                    </CardTitle>
+                    <div className="flex items-center text-muted-foreground">
+                      <Calendar className="w-4 h-4 mr-2" />
                       {project.period}
                     </div>
                   </div>
+                  <div className="flex gap-2">
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="transition-all duration-200 hover:scale-105"
+                    >
+                      <Github className="w-4 h-4 mr-2" />
+                      Code
+                    </Button>
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="transition-all duration-200 hover:scale-105"
+                    >
+                      <ExternalLink className="w-4 h-4 mr-2" />
+                      Demo
+                    </Button>
+                  </div>
                 </div>
               </CardHeader>
-              <CardContent className="p-6">
-                <div className="space-y-6">
-                  <div>
-                    <h4 className="font-semibold mb-3">Key Achievements:</h4>
-                    <ul className="space-y-2">
-                      {project.achievements.map((achievement, achIndex) => (
-                        <li key={achIndex} className="text-muted-foreground flex items-start gap-2">
-                          <span className="text-blue-500 mt-1">•</span>
-                          <span>{achievement}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                  
-                  <div>
-                    <h4 className="font-semibold mb-3">Technologies Used:</h4>
-                    <div className="flex flex-wrap gap-2">
-                      {project.technologies.map((tech, techIndex) => (
-                        <Badge key={techIndex} variant="secondary">
-                          {tech}
-                        </Badge>
-                      ))}
-                    </div>
-                  </div>
 
-                  <div className="flex gap-4 pt-4">
-                    <Button variant="outline" size="sm">
-                      <Github className="mr-2 h-4 w-4" />
-                      View Code
-                    </Button>
-                    <Button variant="outline" size="sm">
-                      <ExternalLink className="mr-2 h-4 w-4" />
-                      Live Demo
-                    </Button>
+              <CardContent>
+                <p className="text-lg text-muted-foreground mb-6 leading-relaxed">
+                  {project.description}
+                </p>
+
+                <div className="mb-8">
+                  <h4 className="text-lg font-semibold mb-4 text-foreground">
+                    Key Achievements:
+                  </h4>
+                  <ul className="space-y-3">
+                    {project.achievements.map((achievement, achIndex) => (
+                      <li 
+                        key={achIndex} 
+                        className="flex items-start"
+                      >
+                        <span className="text-primary mr-3 mt-1 text-lg">•</span>
+                        <span className="text-muted-foreground leading-relaxed">
+                          {achievement}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div>
+                  <h4 className="text-lg font-semibold mb-4 text-foreground">
+                    Technologies Used:
+                  </h4>
+                  <div className="flex flex-wrap gap-2">
+                    {project.technologies.map((tech, techIndex) => (
+                      <Badge 
+                        key={techIndex} 
+                        variant="secondary"
+                        className="px-3 py-1 transition-all duration-200 hover:scale-105"
+                      >
+                        {tech}
+                      </Badge>
+                    ))}
                   </div>
                 </div>
               </CardContent>

@@ -44,32 +44,44 @@ const skillCategories = [
 
 export function Skills() {
   return (
-    <section id="skills" className="py-20 bg-background">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">Technical Skills & Interests</h2>
-          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+    <section className="py-16 px-4 sm:px-6 lg:px-8" id="skills">
+      <div className="max-w-6xl mx-auto">
+        <div className="text-center mb-12">
+          <h2 className="text-4xl font-bold mb-4">
+            Technical Skills & Interests
+          </h2>
+          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
             My technical expertise and areas of interest in software development
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {skillCategories.map((category, index) => {
             const IconComponent = category.icon;
             return (
-              <Card key={index} className="hover:shadow-lg transition-shadow">
+              <Card
+                key={index}
+                className="group p-6 transition-all duration-300 hover:shadow-lg hover:-translate-y-1 hover:shadow-black/10 dark:hover:shadow-black/25"
+              >
                 <CardHeader className="pb-4">
-                  <CardTitle className="flex items-center gap-3 text-lg">
-                    <div className="p-2 bg-blue-100 dark:bg-blue-900/20 rounded-lg">
-                      <IconComponent className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+                  <div className="flex items-center space-x-3">
+                    <div className="p-2 rounded-lg bg-primary/10 group-hover:bg-primary/20 transition-colors duration-300">
+                      <IconComponent className="w-6 h-6 text-primary" />
                     </div>
-                    {category.title}
-                  </CardTitle>
+                    <CardTitle className="text-lg">
+                      {category.title}
+                    </CardTitle>
+                  </div>
                 </CardHeader>
+
                 <CardContent>
                   <div className="flex flex-wrap gap-2">
                     {category.skills.map((skill, skillIndex) => (
-                      <Badge key={skillIndex} variant="secondary" className="text-xs">
+                      <Badge 
+                        key={skillIndex} 
+                        variant="secondary"
+                        className="text-xs px-2 py-1 transition-all duration-200 hover:scale-105 hover:shadow-sm"
+                      >
                         {skill}
                       </Badge>
                     ))}
