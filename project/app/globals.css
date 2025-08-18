@@ -399,7 +399,7 @@
 }
 
 .light .sparklify-parent i {
-  background: rgba(0,0,0,0.75);
+  background: rgba(251, 250, 250, 0.75);
 }
 
 .sparklify-parent:hover i {
@@ -623,7 +623,7 @@
   /* This is the fix: Changed from a gradient to a solid color */
   background: hsl(var(--foreground));
   -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  -webkit-text-fill-color: white;
   background-clip: text;
   color: transparent;
   opacity: 0;
