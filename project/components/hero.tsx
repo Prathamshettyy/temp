@@ -1,14 +1,16 @@
 'use client';
 
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Download, ChevronDown } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import { ChevronDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { SparkleText } from './sparkle-text';
 
+// The main Hero component with an interactive fluid background
 export function Hero() {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const textRef = useRef<HTMLDivElement>(null); // Ref for the text container
   const [isLoaded, setIsLoaded] = useState(false);
+  const [isInView, setIsInView] = useState(false); // State to track visibility
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -16,6 +18,150 @@ export function Hero() {
     }, 100);
 
     return () => clearTimeout(timer);
+  }, []);
+
+  // Intersection Observer to trigger animation on scroll
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        // Update state when intersection changes
+        setIsInView(entry.isIntersecting);
+      },
+      {
+        root: null,
+        rootMargin: '0px',
+        threshold: 0.1, // Trigger when 10% of the element is visible
+      }
+    );
+
+    const currentTextRef = textRef.current;
+    if (currentTextRef) {
+      observer.observe(currentTextRef);
+    }
+
+    return () => {
+      if (currentTextRef) {
+        observer.unobserve(currentTextRef);
+      }
+    };
+  }, []);
+
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    let width = (canvas.width = window.innerWidth);
+    let height = (canvas.height = window.innerHeight);
+
+    // --- Fluid Simulation Logic ---
+    const pointer = {
+      x: 0.5 * width,
+      y: 0.5 * height,
+    };
+
+    class Particle {
+      x: number;
+      y: number;
+      vx: number;
+      vy: number;
+      history: { x: number; y: number }[];
+      
+      constructor(x: number, y: number) {
+        this.x = x;
+        this.y = y;
+        this.vx = 0;
+        this.vy = 0;
+        this.history = [{ x: this.x, y: this.y }];
+      }
+
+      update() {
+        this.x += this.vx;
+        this.y += this.vy;
+
+        if (this.x < 0 || this.x > width || this.y < 0 || this.y > height) {
+          this.x = Math.random() * width;
+          this.y = Math.random() * height;
+          this.history = [{ x: this.x, y: this.y }];
+        }
+
+        const dx = this.x - pointer.x;
+        const dy = this.y - pointer.y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+        
+        if (distance < 300) {
+          const force = -10 / (distance + 1);
+          this.vx += force * (dx / distance);
+          this.vy += force * (dy / distance);
+        }
+        
+        this.vx *= 0.95;
+        this.vy *= 0.95;
+
+        this.history.push({ x: this.x, y: this.y });
+        if (this.history.length > 5) {
+          this.history.shift();
+        }
+      }
+
+      draw() {
+        if (!ctx) return;
+        ctx.beginPath();
+        ctx.moveTo(this.history[0].x, this.history[0].y);
+        for (let i = 1; i < this.history.length; i++) {
+          ctx.lineTo(this.history[i].x, this.history[i].y);
+        }
+        ctx.lineWidth = 1;
+        ctx.strokeStyle = `rgba(138, 43, 226, 0.5)`; // BlueViolet with opacity
+        ctx.stroke();
+      }
+    }
+
+    const particles = Array.from({ length: 300 }, () => new Particle(Math.random() * width, Math.random() * height));
+
+    let animationFrameId: number;
+    function animate() {
+      if (!ctx) return;
+      ctx.fillStyle = 'rgba(12, 0, 20, 0.1)'; // Fading effect
+      ctx.fillRect(0, 0, width, height);
+      
+      particles.forEach(p => {
+        p.update();
+        p.draw();
+      });
+
+      animationFrameId = requestAnimationFrame(animate);
+    }
+
+    animate();
+
+    // --- Event Listeners ---
+    const handleMouseMove = (e: MouseEvent) => {
+      pointer.x = e.clientX;
+      pointer.y = e.clientY;
+    };
+
+    const handleResize = () => {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+      particles.forEach(p => {
+        p.x = Math.random() * width;
+        p.y = Math.random() * height;
+      });
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('resize', handleResize);
+
+    // Cleanup function
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('resize', handleResize);
+      cancelAnimationFrame(animationFrameId);
+    };
   }, []);
 
   const handleScrollClick = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
@@ -27,82 +173,13 @@ export function Hero() {
   };
 
   return (
-    <section 
-      className={cn(
-        'min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8 relative',
-        'transition-all duration-1000',
-        isLoaded ? 'opacity-100' : 'opacity-0'
-      )} 
-      id="home"
-    >
-      {/* Background gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-br from-background via-background/95 to-background/90" />
-
-      {/* Animated background elements */}
-      <div className="absolute inset-0 overflow-hidden">
-        {/* All background glow effects have been removed from here */}
-      </div>
-
-      <div className="max-w-4xl mx-auto text-center relative z-10">
-        {/* Animated badge */}
-        <Badge 
-          variant="secondary" 
-          className={cn(
-            'mb-8 text-sm px-4 py-2 floating glow-border',
-            'transition-all duration-700 delay-200',
-            isLoaded ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'
-          )}
-        >
-          Computer Science Engineering Student
-        </Badge>
-
-        {/* Main heading with gradient text */}
-        <h1 
-          className={cn(
-            'text-5xl sm:text-6xl lg:text-7xl font-bold mb-6',
-            'bg-gradient-to-r from-foreground via-foreground/80 to-foreground bg-clip-text text-transparent',
-            'transition-all duration-700 delay-400',
-            isLoaded ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
-          )}
-        >
-          Pratham R Shetty
-        </h1>
-
-        {/* Description */}
-        <p 
-          className={cn(
-            'text-xl text-muted-foreground max-w-2xl mx-auto mb-12 leading-relaxed',
-            'transition-all duration-700 delay-600',
-            isLoaded ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
-          )}
-        >
-          Passionate about Full Stack Development & AI/ML. Building innovative solutions with modern technologies.
-        </p>
-
-        {/* Action buttons */}
-        <div 
-          className={cn(
-            'flex flex-col sm:flex-row gap-4 justify-center mb-16',
-            'transition-all duration-700 delay-800',
-            isLoaded ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
-          )}
-        >
-          <Button 
-            size="lg" 
-            className="btn-enhanced glow-border group text-lg px-8 py-3"
-          >
-            <Download className="w-5 h-5 mr-2 group-hover:animate-bounce" />
-            Download Resume
-          </Button>
-          <Button 
-            variant="outline" 
-            size="lg" 
-            className="btn-enhanced glow-border text-lg px-8 py-3"
-          >
-            View Projects
-          </Button>
-        </div>
-
+    <section className="hero-fluid-container" id="home">
+      <canvas ref={canvasRef} id="fluid-canvas"></canvas>
+      <div ref={textRef} className="hero-fluid-text">
+        <p className={cn('subtitle', { 'animate-in': isInView })}>YOU'RE NOW VIEWING</p>
+        <h1 className={cn('title-name', { 'animate-in': isInView })}>PRATHAM'S</h1>
+        <h1 className={cn('title-folio', { 'animate-in': isInView })}>PORTFOLIO</h1>
+        
         {/* Sparkle Text Effect */}
         <div 
           className={cn(
@@ -120,7 +197,7 @@ export function Hero() {
         href="#about"
         onClick={handleScrollClick}
         className={cn(
-          'absolute bottom-4 left-1/2 -translate-x-1/2',
+          'absolute bottom-4 left-1/2 -translate-x-1/2 z-20', // Increased z-index
           'transition-all duration-700 delay-1400',
           isLoaded ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
         )}
