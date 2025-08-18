@@ -5,15 +5,18 @@
 /* --- "Neon Noir" Theme & Base Styles --- */
 @layer base {
   :root {
-    /* Light Theme: Clean & Professional */
+    /* Light Theme Variables */
     --background: 0 0% 98%;
     --foreground: 222 47% 11%;
     --card: 0 0% 100%;
     --card-foreground: 222 47% 11%;
     --popover: 0 0% 100%;
     --popover-foreground: 222 47% 11%;
-    --primary: 258 92% 64%; /* Vibrant Purple */
-    --primary-foreground: 0 0% 98%;
+    
+    /* CHANGE: This now overrides the primary color ONLY for the light theme */
+    --primary: 150 15% 25%; /* Dark Charcoal Green */
+    --primary-foreground: 0 0% 98%; /* Light text for the dark button */
+
     --secondary: 210 40% 96.1%;
     --secondary-foreground: 222 47% 11%;
     --muted: 210 40% 96.1%;
@@ -24,19 +27,25 @@
     --destructive-foreground: 0 0% 98%;
     --border: 214 32% 91%;
     --input: 214 32% 91%;
-    --ring: 258 92% 64%;
+
+    /* CHANGE: Ring color for the light theme */
+    --ring: 150 15% 25%;
+    
     --radius: 0.75rem;
   }
 
   .dark {
-    /* Dark Theme: Neon Noir */
-    --background: 222 84% 4.9%; /* Deep Navy */
+    /* Dark Theme: Neon Noir (This section remains untouched) */
+    --background: 222 84% 4.9%; 
     --foreground: 210 40% 98%;
-    --card: 222 83% 7%; /* Darker Navy */
+    --card: 222 83% 7%;
     --card-foreground: 210 40% 98%;
     --popover: 222 84% 4.9%;
     --popover-foreground: 210 40% 98%;
+
+    /* This will now correctly be the purple/teal color for dark mode */
     --primary: 173 97% 50%; /* Bright Teal */
+
     --primary-foreground: 222 47% 11%;
     --secondary: 217 32.6% 17.5%;
     --secondary-foreground: 210 40% 98%;
@@ -51,7 +60,6 @@
     --ring: 173 97% 50%;
   }
 }
-
 @layer base {
   * {
     @apply border-border;
@@ -740,4 +748,24 @@
 
 .sparklify-parent:not(:hover):focus i {
   background: #4a7eff;
+}
+
+/* --- Universal Card Hover Effects --- */
+@layer components {
+  .card-hover-effect {
+    @apply transition-all duration-300 ease-out;
+  }
+
+  /* Light Mode Hover Effect */
+  .card-hover-effect:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 20px -5px hsl(var(--primary) / 0.15), 0 4px 6px -2px hsl(var(--primary) / 0.1);
+  }
+
+  /* Dark Mode Hover Effect */
+  .dark .card-hover-effect:hover {
+    transform: translateY(-4px) scale(1.03);
+    box-shadow: 0 25px 50px -12px hsl(var(--primary) / 0.35), 0 2px 8px 0 hsl(var(--primary) / 0.18);
+    border-color: hsl(var(--primary) / 0.5);
+  }
 }
