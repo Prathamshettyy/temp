@@ -57,17 +57,19 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
-    background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800"><rect fill="hsl(0, 0%, 98%)" width="800" height="800"/><g fill-rule="evenodd"><g fill="hsl(0, 0%, 96.1%)" fill-opacity="0.4"><path d="M787 799V0h1V799h-1zM585 799V0h1V799h-1zM414 799V0h1V799h-1zM343 799V0h1V799h-1z"/></g><g fill="hsl(0, 0%, 96.1%)" fill-opacity="0.4"><path d="M0 1h800V0H0v1zM0 315h800v-1H0v1zM0 584h800v-1H0v1zM0 716h800v-1H0v1z"/></g></g></svg>');
+    @apply text-foreground;
+    /* CHANGE THIS: Make the background transparent */
+    background-color: transparent;
+    /* You can remove the background-image SVG as it will be covered */
   }
 
   .dark body {
-    background-color: hsl(var(--background));
-    background-image: linear-gradient(135deg, hsl(var(--background)) 0%, hsl(260, 60%, 8%) 100%);
-    background-attachment: fixed;
+    /* CHANGE THIS: Make the background transparent */
+    background-color: transparent;
+    /* The linear-gradient is also not needed anymore */
+    background-image: none; 
   }
 }
-
 /* --- Reusable Card Animation --- */
 .card-entry-animation {
   opacity: 0;
@@ -486,16 +488,16 @@
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  background-color: #0c0014; /* A very dark purple background */
+  background-color: transparent; /* Changed from #0c0014 */
 }
 
-#fluid-canvas {
-  position: absolute;
+#fluid-canvas-background {
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: 0;
+  z-index: -1; /* This is important to keep it in the background */
 }
 
 .hero-fluid-text {

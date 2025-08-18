@@ -8,13 +8,13 @@ import { Projects } from '@/components/projects';
 import { Skills } from '@/components/skills';
 import { Achievements } from '@/components/achievements';
 import { Activities } from '@/components/activities';
-// No longer import Contact here
 import { Navigation } from '@/components/navigation';
 import { Footer } from '@/components/footer';
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-background">
+    // REMOVED "bg-background" from this div
+    <div className="min-h-screen">
       <Navigation />
       <main>
         <Hero />
@@ -25,7 +25,6 @@ export default function Home() {
         <Skills />
         <Achievements />
         <Activities />
-        {/* <Contact /> component is removed from here */}
       </main>
       <Footer />
     </div>

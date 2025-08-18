@@ -4,7 +4,8 @@ import { Footer } from '@/components/footer';
 
 export default function ContactPage() {
   return (
-    <div className="min-h-screen bg-background">
+    // REMOVED "bg-background" from this div
+    <div className="min-h-screen">
       <Navigation />
       <main>
         <Contact />
