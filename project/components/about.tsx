@@ -1,8 +1,33 @@
 'use client';
 
+import { useEffect, useRef } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 
 export function About() {
+  const sectionRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+          } else {
+            entry.target.classList.remove('is-visible');
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    const elements = sectionRef.current?.querySelectorAll('.card-entry-animation');
+    elements?.forEach((el) => observer.observe(el));
+
+    return () => {
+      elements?.forEach((el) => observer.unobserve(el));
+    };
+  }, []);
+
   return (
     <section id="about" className="py-20 bg-background">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -13,9 +38,9 @@ export function About() {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-12 items-center">
+        <div ref={sectionRef} className="grid md:grid-cols-2 gap-12 items-center">
           <div className="space-y-6">
-            <Card>
+            <Card className="card-entry-animation">
               <CardContent className="p-6">
                 <h3 className="text-xl font-semibold mb-4">Current Focus</h3>
                 <p className="text-muted-foreground leading-relaxed">
@@ -26,7 +51,7 @@ export function About() {
               </CardContent>
             </Card>
 
-            <Card>
+            <Card className="card-entry-animation">
               <CardContent className="p-6">
                 <h3 className="text-xl font-semibold mb-4">What Drives Me</h3>
                 <p className="text-muted-foreground leading-relaxed">
@@ -39,7 +64,7 @@ export function About() {
           </div>
 
           <div className="space-y-6">
-            <Card>
+            <Card className="card-entry-animation">
               <CardContent className="p-6">
                 <h3 className="text-xl font-semibold mb-4">Areas of Interest</h3>
                 <div className="grid grid-cols-2 gap-4">

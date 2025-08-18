@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect, useRef } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -7,6 +8,30 @@ import { Textarea } from '@/components/ui/textarea';
 import { Mail, Phone, MapPin, Linkedin, Github, Send } from 'lucide-react';
 
 export function Contact() {
+  const sectionRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+          } else {
+            entry.target.classList.remove('is-visible');
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    const elements = sectionRef.current?.querySelectorAll('.card-entry-animation');
+    elements?.forEach((el) => observer.observe(el));
+
+    return () => {
+      elements?.forEach((el) => observer.unobserve(el));
+    };
+  }, []);
+
   return (
     <section id="contact" className="py-20 bg-muted/30">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -17,9 +42,9 @@ export function Contact() {
           </p>
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
+        <div ref={sectionRef} className="grid lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
           <div className="space-y-8">
-            <Card>
+            <Card className="card-entry-animation">
               <CardHeader>
                 <CardTitle>Contact Information</CardTitle>
               </CardHeader>
@@ -79,7 +104,7 @@ export function Contact() {
             </Card>
           </div>
 
-          <Card>
+          <Card className="card-entry-animation">
             <CardHeader>
               <CardTitle>Send me a message</CardTitle>
             </CardHeader>

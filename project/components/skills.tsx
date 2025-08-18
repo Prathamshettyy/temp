@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect, useRef } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Code, Database, Cloud, Wrench, Users, BookOpen, Heart } from 'lucide-react';
@@ -43,6 +44,30 @@ const skillCategories = [
 ];
 
 export function Skills() {
+  const sectionRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+          } else {
+            entry.target.classList.remove('is-visible');
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    const elements = sectionRef.current?.querySelectorAll('.card-entry-animation');
+    elements?.forEach((el) => observer.observe(el));
+
+    return () => {
+      elements?.forEach((el) => observer.unobserve(el));
+    };
+  }, []);
+
   return (
     <section className="py-16 px-4 sm:px-6 lg:px-8" id="skills">
       <div className="max-w-6xl mx-auto">
@@ -55,13 +80,13 @@ export function Skills() {
           </p>
         </div>
 
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        <div ref={sectionRef} className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {skillCategories.map((category, index) => {
             const IconComponent = category.icon;
             return (
               <Card
                 key={index}
-                className="group p-6 transition-all duration-300 hover:shadow-lg hover:-translate-y-1 hover:shadow-black/10 dark:hover:shadow-black/25"
+                className="group p-6 transition-all duration-300 hover:shadow-lg hover:-translate-y-1 hover:shadow-black/10 dark:hover:shadow-black/25 card-entry-animation"
               >
                 <CardHeader className="pb-4">
                   <div className="flex items-center space-x-3">

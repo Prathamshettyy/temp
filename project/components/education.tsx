@@ -105,7 +105,7 @@ export function Education() {
                 <div 
                   key={index} 
                   ref={el => itemRefs.current[index] = el}
-                  className="timeline-item-wrapper"
+                  className="timeline-item-wrapper card-entry-animation"
                 >
                   <div className={cn("timeline-dot", isCurrent && "timeline-dot-current")}>
                     <IconComponent className="h-5 w-5 text-white" />

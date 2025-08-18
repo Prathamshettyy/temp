@@ -40,7 +40,7 @@ export function Hero() {
 
       {/* Animated background elements */}
       <div className="absolute inset-0 overflow-hidden">
-        {/* This is the line that was removed */}
+        {/* All background glow effects have been removed from here */}
       </div>
 
       <div className="max-w-4xl mx-auto text-center relative z-10">

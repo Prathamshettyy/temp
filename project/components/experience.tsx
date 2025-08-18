@@ -1,9 +1,10 @@
 'use client';
 
+import { useEffect, useRef } from 'react';
 import Image from 'next/image';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Briefcase, Calendar, CheckCircle, LinkIcon } from 'lucide-react';
+import { Briefcase, Calendar, CheckCircle } from 'lucide-react';
 import torsecureLogo from '/torsecure-logo.png';
 
 const experiences = [
@@ -27,19 +28,43 @@ const experiences = [
 ];
 
 export function Experience() {
+  const sectionRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+          } else {
+            entry.target.classList.remove('is-visible');
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    const elements = sectionRef.current?.querySelectorAll('.card-entry-animation');
+    elements?.forEach((el) => observer.observe(el));
+
+    return () => {
+      elements?.forEach((el) => observer.unobserve(el));
+    };
+  }, []);
+
   return (
     <section id="experience" className="py-20 bg-background">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">Experience</h2>
-            <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
             Explore my hands-on roles, responsibilities, and skills gained through real-world work experience.
-            </p>
+          </p>
         </div>
 
-        <div className="max-w-4xl mx-auto">
+        <div ref={sectionRef} className="max-w-4xl mx-auto">
           {experiences.map((exp, index) => (
-            <Card key={index} className="overflow-hidden shadow-lg transition-shadow hover:shadow-xl">
+            <Card key={index} className="overflow-hidden shadow-lg transition-shadow hover:shadow-xl card-entry-animation">
               <CardHeader className="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 p-6">
                 <div className="flex flex-col sm:flex-row justify-between items-start gap-4">
                   <div className="flex items-center gap-4">
