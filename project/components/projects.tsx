@@ -5,10 +5,10 @@ import Image from 'next/image';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, Rocket } from 'lucide-react';
-import vrikshaRakshakImage from './images/vriksha-rakshak.png';
-import promedImage from './images/promed.png';
-import brainbuzzImage from './images/brainbuzz.png';
-import helpnowAiImage from './images/helpnow-ai.png'; // New image import
+import vrikshaRakshakImage from 'components/images/vriksha-rakshak.png';
+import promedImage from 'components/images/promed.png';
+import brainbuzzImage from 'components/images/brainbuzz.png';
+import helpnowAiImage from 'components/images/helpnow-ai.png'; // New image import
 
 const projects = [
     {
